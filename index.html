@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erika Olarte | Roadmap Profesional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --gold: #78c4db;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --pelo: #5d4037;
+            --color-piel: #f8c98c;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        #avatar-container {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            z-index: 100;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            pointer-events: none;
+        }
+
+        .avatar-circle {
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* BURBUJA LATERAL QUE NO TAPA NADA */
+        .burbuja {
+            position: absolute;
+            right: 115%; /* Separada a la izquierda */
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95); /* Semi-transparente para ver el fondo */
+            backdrop-filter: blur(4px);
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            width: 160px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: opacity 0.4s ease;
+        }
+
+        .burbuja::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 8px solid transparent;
+            border-left-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .mapa {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 100px;
+            position: relative;
+        }
+
+        .camino-linea {
+            position: absolute;
+            width: 6px;
+            background: white;
+            top: 0; bottom: 0;
+            z-index: 0;
+        }
+
+        .nivel { position: relative; z-index: 1; margin: 30px 0; }
+
+        .boton-nivel {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: var(--text);
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 280px;
+            font-weight: 700;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .boton-nivel.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+        .boton-nivel.completed { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .info-panel {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            width: 85%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 200;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 150;
+            backdrop-filter: blur(5px);
+        }
+
+        .cerrar-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            float: right;
+            margin-top: 15px;
+        }
+
+        h1 { font-size: 1.8rem; color: var(--primary); text-align: center; margin-bottom: 5px; }
+        .sub { color: var(--gold); text-align: center; font-weight: 600; margin-top: 0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div id="avatar-container">
+    <div class="burbuja" id="mensaje-avatar">¡Hola! Soy Erika Olarte. y quiero llevarte por mi curruculo¡Haz clic en el Nivel 1 para comenzar!</div>
+    <div class="avatar-circle">🏃‍♀️</div>
+</div>
+
+<header style="padding-top: 30px;">
+    <h1>ERIKA CONSTANZA OLARTE RODRÍGUEZ</h1>
+    <p class="sub">CURRÍCULO INTERACTIVO</p>
+</header>
+
+<div class="mapa">
+    <div class="camino-linea"></div>
+    <div class="nivel"><button class="boton-nivel active" id="btn-0" onclick="irA(0, 'p0')">Nivel 1: Mi Perfil</button></div>
+    <div class="nivel"><button class="boton-nivel" id="btn-1" onclick="irA(1, 'p1')">Nivel 2: Estudios</button></div>
+    <div class="nivel"><button class="boton-nivel" id="btn-2" onclick="irA(2, 'p2')">Nivel 3: Experiencia</button></div>
+    <div class="nivel"><button class="boton-nivel" id="btn-3" onclick="irA(3, 'p3')">Nivel 4: Habilidades</button></div>
+    <div class="nivel"><button class="boton-nivel" id="btn-4" onclick="irA(4, 'p4')">Nivel 5: Otros Logros</button></div>
+    <div class="nivel"><button class="boton-nivel" id="btn-5" onclick="irA(5, 'p5')">Nivel 6: Referencias</button></div>
+    <div class="nivel"><button class="boton-nivel" id="btn-6" onclick="irA(6, 'p6')">Nivel 7: Contacto</button></div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div id="p0" class="info-panel">
+    <h2>Perfil Profesional</h2>
+    <p>Auxiliar Administrativa recién graduada en Recursos Humanos y Secretaría Ejecutiva. Persona organizada y responsable, con interés en el crecimiento personal y profesional. Amante de la lectura, el ejercicio al aire libre, el tiempo en familia y con amigos, y con vocación de servicio a Dios.</p>
+    <button class="cerrar-btn" onclick="cerrar()">Continuar</button>
+</div>
+
+<div id="p1" class="info-panel">
+    <h2>Formación Académica</h2>
+    <p><strong>INESCO:</strong> Auxiliar en R.R H.H y Secretaría Ejecutiva.</p>
+    <p><strong>U. San Buenaventura:</strong> Técnico en Sistemas e Informática.</p>
+    <button class="cerrar-btn" onclick="cerrar()">Siguiente</button>
+</div>
+
+<div id="p2" class="info-panel">
+    <h2>Experiencia Laboral</h2>
+    <p><strong>U. Jorge Tadeo Lozano:</strong> Aprendiz Administrativa (Atención al cliente y gestión documental).</p>
+    <p><strong>Servi Seguros Profesionales:</strong> Auxiliar Administrativa (Caja menor y archivo).</p>
+    <p><strong>TIGO:</strong> Asesora Comercial (Ventas y bases de datos).</p>
+    <button class="cerrar-btn" onclick="cerrar()">Ver más</button>
+</div>
+
+<div id="p3" class="info-panel">
+    <h2>Habilidades</h2>
+    <ul>
+        <li>Manejo de caja menor.</li>
+        <li>Administración básica y apoyo comercial.</li>
+        <li>Redacción de correos electrónicos.</li>
+        <li>Envío de documentos y archivos.</li>
+        <li>Manejo de software de oficina.</li>
+        <li>Manejo de nómina.</li>
+        <li>Comunicación y liderazgo.</li>
+    </ul>
+    <button class="cerrar-btn" onclick="cerrar()">Continuar</button>
+</div>
+
+<div id="p4" class="info-panel">
+    <h2>Formación Complementaria</h2>
+    <p>Certificaciones en Excel (Intermedio/Avanzado), Power BI y Primer Respondiente.</p>
+    <button class="cerrar-btn" onclick="cerrar()">Siguiente</button>
+</div>
+
+<div id="p5" class="info-panel">
+    <h2>Referencias</h2>
+    <p><strong>Laboral:</strong> Daniel González (U. Tadeo).</p>
+    <p><strong>Personal:</strong> Laura Guevara (Aux. Administrativa).</p>
+    <button class="cerrar-btn" onclick="cerrar()">Meta Final</button>
+</div>
+
+<div id="p6" class="info-panel">
+    <h2>Contacto Directo</h2>
+    <div style="background: #f1f5f9; padding: 20px; border-radius: 15px; text-align: center;">
+        <p style="font-size: 1.2rem;"><strong>📞 305 200 4238</strong></p>
+        <p>erikacor2016@gmail.com</p>
+    </div>
+    <button class="cerrar-btn" onclick="location.reload()">Reiniciar</button>
+</div>
+
+<script>
+    const avatar = document.getElementById('avatar-container');
+    const mensaje = document.getElementById('mensaje-avatar');
+    let currentStep = 0;
+
+    window.onload = () => moverAvatar(0);
+
+    function moverAvatar(step) {
+        const btn = document.getElementById(`btn-${step}`);
+        const rect = btn.getBoundingClientRect();
+        avatar.style.top = (rect.top + window.scrollY - 95) + 'px';
+        avatar.style.left = (rect.left + (rect.width / 2) - 40) + 'px';
+        
+        // El diálogo se desvanece en cuanto empiezas a jugar para no tapar nada
+        if(step > 0) mensaje.style.opacity = '0';
+    }
+
+    function irA(step, panelId) {
+        moverAvatar(step);
+        setTimeout(() => {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(panelId).style.display = 'block';
+            currentStep = step;
+        }, 600);
+    }
+
+    function cerrar() {
+        document.getElementById('overlay').style.display = 'none';
+        document.querySelectorAll('.info-panel').forEach(p => p.style.display = 'none');
+        document.getElementById(`btn-${currentStep}`).classList.add('completed');
+        if(currentStep < 6) document.getElementById(`btn-${currentStep + 1}`).classList.add('active');
+    }
+</script>
+</body>
+</html>
